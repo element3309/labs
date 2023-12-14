@@ -1,0 +1,17 @@
+Core/Inc/Backup/
+Core/Src/Backup/
+Core/Startup/
+Debug/
+Drivers/
+.settings/
+*.cproject
+*.mxproject
+*.project
+*.project.bak
+*.launch
+*.xml
+*.pdf
+*.ld
+
+
+
