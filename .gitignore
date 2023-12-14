@@ -1,6 +1,7 @@
 Core/Inc/Backup/
 Core/Src/Backup/
 Core/Startup/
+MDK-ARM
 Debug/
 Drivers/
 .settings/
