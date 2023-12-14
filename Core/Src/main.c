@@ -92,7 +92,7 @@ int main(void)
   MX_USB_OTG_FS_PCD_Init();
   /* USER CODE BEGIN 2 */
   const float pwm_freq = 10.00;
-  float pwm_duty_cycle = 0.20;
+  float pwm_duty_cycle = 0.50;
   /* USER CODE END 2 */
 
   /* Infinite loop */
