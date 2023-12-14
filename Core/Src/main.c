@@ -92,7 +92,7 @@ int main(void)
   MX_USB_OTG_FS_PCD_Init();
   /* USER CODE BEGIN 2 */
   const float pwm_freq = 10.00;
-  float pwm_duty_cycle = 0.20;
+  float pwm_duty_cycle = 0.00;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -100,9 +100,9 @@ int main(void)
   while (1)
   {
 	  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
-	  HAL_Delay((uint32_t)(pwm_freq*pwm_duty_cycle));
-	  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
-	  HAL_Delay((uint32_t)(pwm_freq*(1-pwm_duty_cycle)));
+	      HAL_Delay((uint32_t)(pwm_freq*pwm_duty_cycle));
+	      HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+	      HAL_Delay((uint32_t)(pwm_freq*(1-pwm_duty_cycle)));
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
