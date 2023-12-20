@@ -100,16 +100,75 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
-	  HAL_Delay((uint32_t)(pwm_freq*pwm_duty_cycle));
-	  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
-	  HAL_Delay((uint32_t)(pwm_freq*(1-pwm_duty_cycle)));
+		for(int i = 0; i < 255; i++) {
+		// 1-4 pin
+	  HAL_GPIO_WritePin(MOT1_GPIO_Port, MOT1_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(MOT2_GPIO_Port, MOT2_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(MOT3_GPIO_Port, MOT3_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(MOT4_GPIO_Port, MOT4_Pin, GPIO_PIN_SET);//1
+
+		HAL_Delay(5);
+		
+		// 4 pin
+		HAL_GPIO_WritePin(MOT1_GPIO_Port, MOT1_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(MOT2_GPIO_Port, MOT2_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(MOT3_GPIO_Port, MOT3_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(MOT4_GPIO_Port, MOT4_Pin, GPIO_PIN_SET); //2
+
+		HAL_Delay(5);
+		
+		// 4-3 pin
+		HAL_GPIO_WritePin(MOT1_GPIO_Port, MOT1_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(MOT2_GPIO_Port, MOT2_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(MOT3_GPIO_Port, MOT3_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(MOT4_GPIO_Port, MOT4_Pin, GPIO_PIN_SET); //3
+		
+		HAL_Delay(5);
+		
+		//3 pin
+		HAL_GPIO_WritePin(MOT1_GPIO_Port, MOT1_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(MOT2_GPIO_Port, MOT2_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(MOT3_GPIO_Port, MOT3_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(MOT4_GPIO_Port, MOT4_Pin, GPIO_PIN_RESET); //4
+		
+		HAL_Delay(5);
+		
+		//3-2 pin
+		HAL_GPIO_WritePin(MOT1_GPIO_Port, MOT1_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(MOT2_GPIO_Port, MOT2_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(MOT3_GPIO_Port, MOT3_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(MOT4_GPIO_Port, MOT4_Pin, GPIO_PIN_RESET); //5
+		
+		HAL_Delay(5);
+		
+		//2 pin
+		HAL_GPIO_WritePin(MOT1_GPIO_Port, MOT1_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(MOT2_GPIO_Port, MOT2_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(MOT3_GPIO_Port, MOT3_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(MOT4_GPIO_Port, MOT4_Pin, GPIO_PIN_RESET); //6
+		
+		//2-1 pin
+		HAL_GPIO_WritePin(MOT1_GPIO_Port, MOT1_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(MOT2_GPIO_Port, MOT2_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(MOT3_GPIO_Port, MOT3_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(MOT4_GPIO_Port, MOT4_Pin, GPIO_PIN_RESET); //7
+		
+		HAL_Delay(5);
+		
+		//1 pin
+		HAL_GPIO_WritePin(MOT1_GPIO_Port, MOT1_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(MOT2_GPIO_Port, MOT2_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(MOT3_GPIO_Port, MOT3_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(MOT4_GPIO_Port, MOT4_Pin, GPIO_PIN_RESET); //8
+		
+		HAL_Delay(5);
+		
+		HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+	}
+		
+		HAL_Delay(10000);
     /* USER CODE END WHILE */
-		pwm_duty_cycle = pwm_duty_cycle + 0.01*dir;
-		if (pwm_duty_cycle >= 1 && pwm_duty_cycle <= 0) {
-				dir = dir * (-1);
-			}
-		}
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
