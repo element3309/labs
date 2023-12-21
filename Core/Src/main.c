@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "tim.h"
 #include "usart.h"
 #include "usb_otg.h"
 #include "gpio.h"
@@ -56,8 +57,15 @@ void SystemClock_Config(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
 
+/* USER CODE BEGIN 0 */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+        if(htim->Instance == TIM6) //check if the interrupt comes from TIM1
+        {
+                HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+        }
+}
 /* USER CODE END 0 */
 
 /**
@@ -90,19 +98,69 @@ int main(void)
   MX_GPIO_Init();
   MX_USART3_UART_Init();
   MX_USB_OTG_FS_PCD_Init();
+  MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
-  const float pwm_freq = 10.00;
+  const float pwm_freq = 5.00;
   float pwm_duty_cycle = 0.00;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  htim6.Instance->ARR = 1999; //смена уставки таймера (до скольки считать)
+    HAL_TIM_Base_Start_IT(&htim6); //запуск прерываний по таймеру
   while (1)
   {
-	  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
-	      HAL_Delay((uint32_t)(pwm_freq*pwm_duty_cycle));
-	      HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
-	      HAL_Delay((uint32_t)(pwm_freq*(1-pwm_duty_cycle)));
+	//1
+for(int i = 0; i<255; i++) {
+HAL_GPIO_Write(MOT1_GPIO_Port, MOT1_Pin, 0);
+HAL_GPIO_Write(MOT4_GPIO_Port, MOT4_Pin, 1);
+HAL_GPIO_Write(MOT2_GPIO_Port, MOT2_Pin, 0);
+HAL_GPIO_Write(MOT3_GPIO_Port, MOT3_Pin, 0);
+HAL_Delay((uint32_t)(pwm_freq*(1-pwm_duty_cycle)));
+//2
+HAL_GPIO_Write(MOT1_GPIO_Port, MOT1_Pin, 0);
+HAL_GPIO_Write(MOT3_GPIO_Port, MOT3_Pin, 1);
+HAL_GPIO_Write(MOT2_GPIO_Port, MOT2_Pin, 0);
+HAL_GPIO_Write(MOT4_GPIO_Port, MOT4_Pin, 1);
+HAL_Delay((uint32_t)(pwm_freq*(1-pwm_duty_cycle)));
+//3
+HAL_GPIO_Write(MOT4_GPIO_Port, MOT4_Pin, 0);
+HAL_GPIO_Write(MOT2_GPIO_Port, MOT2_Pin, 0);
+HAL_GPIO_Write(MOT1_GPIO_Port, MOT1_Pin, 0);
+HAL_GPIO_Write(MOT3_GPIO_Port, MOT3_Pin, 1);
+HAL_Delay((uint32_t)(pwm_freq*(1-pwm_duty_cycle)));
+//4
+HAL_GPIO_Write(MOT3_GPIO_Port, MOT3_Pin, 1);
+HAL_GPIO_Write(MOT1_GPIO_Port, MOT1_Pin, 0);
+HAL_GPIO_Write(MOT2_GPIO_Port, MOT2_Pin, 1);
+HAL_GPIO_Write(MOT4_GPIO_Port, MOT4_Pin, 0);
+HAL_Delay((uint32_t)(pwm_freq*(1-pwm_duty_cycle)));
+//5
+HAL_GPIO_Write(MOT1_GPIO_Port, MOT1_Pin, 0);
+HAL_GPIO_Write(MOT4_GPIO_Port, MOT4_Pin, 0);
+HAL_GPIO_Write(MOT2_GPIO_Port, MOT2_Pin, 1);
+HAL_GPIO_Write(MOT3_GPIO_Port, MOT3_Pin, 0);
+HAL_Delay((uint32_t)(pwm_freq*(1-pwm_duty_cycle)));
+//6
+HAL_GPIO_Write(MOT1_GPIO_Port, MOT1_Pin, 1);
+HAL_GPIO_Write(MOT3_GPIO_Port, MOT3_Pin, 0);
+HAL_GPIO_Write(MOT2_GPIO_Port, MOT2_Pin, 1);
+	  HAL_GPIO_Write(MOT4_GPIO_Port, MOT4_Pin, 0);
+HAL_Delay((uint32_t)(pwm_freq*(1-pwm_duty_cycle)));
+//7
+HAL_GPIO_Write(MOT4_GPIO_Port, MOT4_Pin, 0);
+	  HAL_GPIO_Write(MOT2_GPIO_Port, MOT2_Pin, 0);
+	HAL_GPIO_Write(MOT1_GPIO_Port, MOT1_Pin, 1);
+			  HAL_GPIO_Write(MOT3_GPIO_Port, MOT3_Pin, 0);
+	  HAL_Delay((uint32_t)(pwm_freq*(1-pwm_duty_cycle)));
+//8
+	HAL_GPIO_Write(MOT3_GPIO_Port, MOT3_Pin, 0);
+			  HAL_GPIO_Write(MOT1_GPIO_Port, MOT1_Pin, 1);
+			HAL_GPIO_Write(MOT2_GPIO_Port, MOT2_Pin, 0);
+					  HAL_GPIO_Write(MOT4_GPIO_Port, MOT4_Pin, 1);
+			  HAL_Delay((uint32_t)(pwm_freq*(1-pwm_duty_cycle)));
+}
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
