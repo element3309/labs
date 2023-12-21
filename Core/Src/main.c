@@ -20,14 +20,13 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
-#include "tim.h"
 #include "usart.h"
 #include "usb_otg.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "platform/platform.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -37,9 +36,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define tV_25   0.76f      // Напряжение (в вольтах) на датчике при температуре 25 °C.
-#define tSlope  0.0025f    // �?зменение напряжения (в вольтах) при изменении температуры на градус.
-#define Vref    3.3f       // Образцовое напряжение АЦП (в вольтах).
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -61,14 +58,12 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+void plt_uart_transmit(plt_uart_t *uart, uint8_t* data, uint16_t size)
 {
-        if(htim->Instance == TIM6) //check if the interrupt comes from TIM1
-        {
-                HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
-        }
+	if(uart->port == 3){
+		HAL_UART_Transmit(&huart3, data, size, 100);
+	}
 }
-
 /* USER CODE END 0 */
 
 /**
@@ -101,38 +96,16 @@ int main(void)
   MX_GPIO_Init();
   MX_USART3_UART_Init();
   MX_USB_OTG_FS_PCD_Init();
-  MX_TIM6_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-  int16_t Result=0;
-  float temp;
-  htim6.Instance->ARR = 1999; //смена уставки таймера (до скольки считать)
-  HAL_TIM_Base_Start_IT(&htim6); //запуск прерываний по таймеру
+  plt_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
-
-	  //HAL_GPIO_TogglePin(MOT1_GPIO_Port, MOT1_Pin);
-	  //if(HAL_GPIO_ReadPin(USER_Btn_GPIO_Port,USER_Btn_Pin)){
-	  //	HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
-	  //} else {
-	  //	HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
-	  //}
-	  //HAL_Delay(50);
-//	  HAL_Delay(1000);       // Задержка 1000 мс.
-//	  HAL_ADC_Start(&hadc1); // Запуск АЦП.
-//	  if (HAL_ADC_PollForConversion(&hadc1, 100) == HAL_OK) // Ожидание завершения преобразования.
-//	  {
-//		  Result = HAL_ADC_GetValue(&hadc1); // Считывание с АЦП.
-//		  temp = (float) Result/4096*Vref;   // Напряжение в вольтах на датчике.
-//		  temp = (temp-tV_25)/tSlope + 25;   // Температура в градусах.
-//		  Result = (int16_t) temp;
-//	  }
-//	  HAL_ADC_Stop(&hadc1); // Остановка АЦП.
+	  plt_scheduler();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
