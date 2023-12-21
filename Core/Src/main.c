@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "tim.h"
 #include "usart.h"
 #include "usb_otg.h"
 #include "gpio.h"
@@ -57,6 +58,13 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+        if(htim->Instance == TIM6) //check if the interrupt comes from TIM1
+        {
+                HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+        }
+}
 
 /* USER CODE END 0 */
 
@@ -90,17 +98,21 @@ int main(void)
   MX_GPIO_Init();
   MX_USART3_UART_Init();
   MX_USB_OTG_FS_PCD_Init();
+  MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
   const float pwm_freq = 10.00;
   float pwm_duty_cycle = 0.00;
 	float dir = 1;
+	
+	float temp;
+  htim6.Instance->ARR = 1999; // timer change
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		for(int i = 0; i < 255; i++) {
+		for(int i = 0; i <= 255; i++) {
 		// 1-4 pin
 	  HAL_GPIO_WritePin(MOT1_GPIO_Port, MOT1_Pin, GPIO_PIN_SET);
 		HAL_GPIO_WritePin(MOT2_GPIO_Port, MOT2_Pin, GPIO_PIN_RESET);
@@ -163,7 +175,7 @@ int main(void)
 		
 		HAL_Delay(5);
 		
-		HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+	
 	}
 		
 		HAL_Delay(10000);
