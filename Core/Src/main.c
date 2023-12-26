@@ -27,7 +27,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -104,7 +104,8 @@ int main(void)
   MX_TIM6_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-  int16_t Result=0;
+  uint32_t Result;
+  uint8_t buf[100];
   float temp;
   htim6.Instance->ARR = 1999; //смена уставки таймера (до скольки считать)
   HAL_TIM_Base_Start_IT(&htim6); //запуск прерываний по таймеру
@@ -114,25 +115,17 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
-
-	  //HAL_GPIO_TogglePin(MOT1_GPIO_Port, MOT1_Pin);
-	  //if(HAL_GPIO_ReadPin(USER_Btn_GPIO_Port,USER_Btn_Pin)){
-	  //	HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
-	  //} else {
-	  //	HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
-	  //}
-	  //HAL_Delay(50);
-//	  HAL_Delay(1000);       // Задержка 1000 мс.
-//	  HAL_ADC_Start(&hadc1); // Запуск АЦП.
-//	  if (HAL_ADC_PollForConversion(&hadc1, 100) == HAL_OK) // Ожидание завершения преобразования.
-//	  {
-//		  Result = HAL_ADC_GetValue(&hadc1); // Считывание с АЦП.
-//		  temp = (float) Result/4096*Vref;   // Напряжение в вольтах на датчике.
-//		  temp = (temp-tV_25)/tSlope + 25;   // Температура в градусах.
-//		  Result = (int16_t) temp;
-//	  }
-//	  HAL_ADC_Stop(&hadc1); // Остановка АЦП.
+	  HAL_Delay(1000);       // Задержка 1000 мс.
+	  HAL_ADC_Start(&hadc1); // Запуск АЦП.
+	  if (HAL_ADC_PollForConversion(&hadc1, 100) == HAL_OK) // Ожидание завершения преобразования.
+	  {
+		  Result = HAL_ADC_GetValue(&hadc1); // Считывание с АЦП.
+		  temp = (float) Result/4096*Vref;   // Напряжение в вольтах на датчике.
+		  temp = (temp-tV_25)/tSlope + 25;   // Температура в градусах.
+	  }
+	  HAL_ADC_Stop(&hadc1); // Остановка АЦП.
+	  snprintf(buf,100, "Temperature = %0.3f\r\n",temp);
+	  HAL_UART_Transmit(&huart3,buf,50,100);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
