@@ -114,9 +114,10 @@ int main(void)
 	  plt_scheduler();
 	  uint16_t data = ads1115_shot_read();
 
-	  float bibon = 3.125*(pow(10,-5))*data;
+	  float result = data;
 
-	  uint16_t size = sprintf(sprintf_buffer, "Hello %f\n\r", bibon);
+	  //uint16_t size = sprintf(sprintf_buffer, "Voltage %f\n\r", result);
+	  uint16_t size = sprintf(sprintf_buffer, "Voltage %u\n\r", data);
 	  HAL_UART_Transmit(&huart3,(uint8_t*)sprintf_buffer, size ,100);
 	  HAL_Delay(1000);
     /* USER CODE END WHILE */
